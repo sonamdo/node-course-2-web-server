@@ -2,6 +2,7 @@ const express = require('express');//load express npm, the framework we'll be us
 const hbs = require('hbs');//loads handelbar. Using this view engine to make dynamic pages
 const fs = require('fs');//loads file-system npm
 
+const port = process.env.PORT || 3000;//stores port taken from environment variables. Uses port 3000 if Heroku is unavailable
 var app = express();//stores server app
 
 hbs.registerPartials(__dirname + '/views/partials');//Set up directory for partials: Parts of webpages that can be used on multiple pages
@@ -70,6 +71,6 @@ app.get('/bad', (req,res) => {
   })
 });
 
-app.listen(3000, () =>{
-  console.log('Server is up on port 3000')
+app.listen(port, () =>{//makes dynamic using environment variable, Heroku sets Port variable, app reads this and uses it as a port
+  console.log('Server is up on port ' + port);
 });//binds application to a port on our system
