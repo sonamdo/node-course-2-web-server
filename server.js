@@ -8,9 +8,10 @@ var app = express();//stores server app
 hbs.registerPartials(__dirname + '/views/partials');//Set up directory for partials: Parts of webpages that can be used on multiple pages
 app.set('view engine','hbs');//key value pair. Sets express related configureation
 
-app.use((req, res, next) =>{//registers middelware. Req stores all info about user/device
+app.use((req, res, next) => {//registers middelware. Req stores all info about user/device
   var now = new Date().toString();//time server request was called
   var log = now + " : " + req.method + req.url;
+
   console.log(log);
   fs.appendFile('server.log', log + 'n', (err) =>{//uses fs npm to create file server.log with log data of how server is working
     if (err){
@@ -33,17 +34,13 @@ hbs.registerHelper('getCurrentYear',()=>{//handelbar helper, stores info for use
 
 hbs.registerHelper('screamIt', (text)=>{
   return text.toUpperCase();
-})
+});
 
-//we're setting up a handler for a get request. 2 arguments, URL + Function that runs ie response
-app.get('/',(req,res) => {//req stores info from request, response stores methods for response.
-  // res.send('<h1>Hello Express!</h1>');
-  res.send({
-    name: 'Sonam',
-    likes: [
-      'Biking',
-      'Julie'
-    ]
+app.get('/', (req,res) => {
+  res.render('home.hbs',{
+    pageTitle: 'Home Page',
+    welcomeMessage: 'Welcome to my website',
+    currentYear: new Date().getFullYear()
   })
 });
 
@@ -52,14 +49,6 @@ app.get('/about', (req,res) => {//sets new route to localhost:3000/about. -Makes
     pageTitle: 'About Page',
     currentYear: new Date().getFullYear()//built in JS constructor
   })//Objects rendered through HBS can be accessed in html using double curly brackers
-});
-
-app.get('/home', (req,res) => {
-  res.render('home.hbs',{
-    pageTitle: 'Home Page',
-    welcomeMessage: 'Welcome to my website',
-    currentYear: new Date().getFullYear()
-  })
 });
 
 app.get('/bad', (req,res) => {
